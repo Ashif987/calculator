@@ -1,67 +1,110 @@
 #include <stdio.h>
-#include <stdlib>
+#include <stdlib.h>
 #include <string.h>
-
-void handleaddition(double *result,double num);
+#include <ctype.h>
+void handleaddition(double *result,double num);//
 void handlesubtraction(double *result,double num);
 void handlemultiplication(double *result,double num);
 void handledivision(double *result,double num);
 
 int main() {
-    char input[256]
-    char *token;
-    double num;
-    double result;
-    char op;
-    
-    printf("arithmetic symbol (+,-,*,/");
-  if    fget(input,sizeof(input),stdin)== NULL)
+	char input[256];//  array to hold input
+	char *token;// pointer too hold token
+	double num;// variable to store numbers
+	double result;// variable to store final result
+	char op=0;
+	int first = 1; //
+while(1) { 
+	printf("arithmetic expression(e.g.,1+2*8)or exit to quit:");
+	if(fgets(input,sizeof(input),stdin) == NULL) {
+		printf("error reading.\n");
+		exit(1);
+	}
+	if(strncmp(input,"exit",4)==0) {
+	    printf("exit the calc.\n");
+	    exit(0);
+	    
+	}
+	first=1;
+	token = strtok(input,"\t\n");
+	while(token != NULL){
+		if (isdigit(token[0]) || (token[0]=='-' && isdigit(token[1])))
+		{	num = atof(token);
 
-    switch (input)
-    {
-        case '+':
-            handleaddition(num1, num2);
-            break;
-
-        case '-':
-            handlesubtraction(num1, num2);
-            break;
-
-        case '*':
-            handlemultiplication(num1, num2);
-            break;
-
-        case '/':
-            handledivision(num1, num2);
-            break;
-
-        default:
-            printf("error.\n");
-            break;
-    }
-    return 0;
-
-    void handleaddition(double a, double b) {
-        printf("result:%.2f\n,a + b");
+			if(first)
+			{	result=num;
+				first = 0;
+			} else
+			{
 
 
-    }
-    void handlesubtraction(double a, double b) {
-        printf("result:%.2f\n", a - b);
+				switch(op)
+				{
+				case '+':
+					handleaddition(&result,num);
+					break;
 
-    }
+				case '-':
+					handlesubtraction(&result,num);
+					break;
 
-    void handlemultiplication(double a, double b) {
-        printf("result:%.2f\n", a * b);
+				case '*':
+					handlemultiplication(&result,num);
+					break;
+				case '/':
+					handledivision(&result,num);
+					break;
 
-    }
-    void handledivision(double a, double b){
-    if (b != 0) {
-        printf("result:%.2f\n", a / b);
-
-    }else {
-        printf("error:division by zero.\n");
-    }
+				default:
+					printf("error.\n");
+					return 1;
+				}
+			}
+		} else if(strlen(token) == 1 && strchr("+-*/",token[0])) {
+			op = token[0];
+		} else {
+			printf("input.\n");
+			break;
+		}
+	token = strtok(NULL,"\t\n");
+}
+if (!first) {
+printf("result:%.2f\n",result);
 
 }
+
 }
+
+}
+
+
+void handleaddition(double *result,double num) {
+	*result += num;
+
+
+}
+void handlesubtraction(double *result,double num) {
+	*result -= num;
+
+
+}
+
+void handlemultiplication(double *result,double num) {
+	*result *= num;
+
+
+}
+void handledivision(double *result,double num)
+
+{
+	if (num!=0) {
+		*result/=num;
+
+	} else {
+		printf("error:division by zero.\n");
+		exit(1);
+	}
+}
+
+
+
